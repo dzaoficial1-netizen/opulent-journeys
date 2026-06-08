@@ -83,6 +83,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Bespoke luxury travel — private villas, curated escapes, and concierge service across the world's most extraordinary destinations." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Luxury Escapes — Your Journey. Elevated." },
+      { name: "twitter:description", content: "Bespoke luxury travel — private villas, curated escapes, and concierge service across the world's most extraordinary destinations." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7089a8cd-f646-4ce4-95a4-5ab3eaa7082c/id-preview-717f4d42--eb685932-7e7a-4b00-b16a-4ebb8ac65636.lovable.app-1780960809275.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7089a8cd-f646-4ce4-95a4-5ab3eaa7082c/id-preview-717f4d42--eb685932-7e7a-4b00-b16a-4ebb8ac65636.lovable.app-1780960809275.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
