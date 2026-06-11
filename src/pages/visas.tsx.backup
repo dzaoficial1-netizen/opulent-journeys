@@ -1,0 +1,358 @@
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { Check } from "lucide-react";
+import { PageLayout } from "@/components/layout/PageLayout";
+import { Button } from "@/components/ui/button";
+import { CountryCombobox } from "@/components/CountryCombobox";
+import { Badge } from "@/components/ui/badge";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  getVisaRequirement,
+  VISA_TYPE_LABELS,
+  VISA_TYPE_COLORS,
+  POPULAR_VISA_DESTINATIONS,
+  VISA_FAQ,
+} from "@/lib/data/visas";
+import { getCountry } from "@/lib/data/countries";
+import { CARD_BASE, SECTION_HEADING } from "@/lib/card-styles";
+
+const VISA_COUNTRIES = [
+  // Visa Free
+  { code: "TN", name: "Tunisia", flag: "https://flagcdn.com/w40/tn.png", visaType: "visa_free" as const },
+  { code: "MA", name: "Morocco", flag: "https://flagcdn.com/w40/ma.png", visaType: "visa_free" as const },
+  { code: "MR", name: "Mauritania", flag: "https://flagcdn.com/w40/mr.png", visaType: "visa_free" as const },
+  { code: "ML", name: "Mali", flag: "https://flagcdn.com/w40/ml.png", visaType: "visa_free" as const },
+  { code: "NE", name: "Niger", flag: "https://flagcdn.com/w40/ne.png", visaType: "visa_free" as const },
+  { code: "SN", name: "Senegal", flag: "https://flagcdn.com/w40/sn.png", visaType: "visa_free" as const },
+  { code: "GM", name: "Gambia", flag: "https://flagcdn.com/w40/gm.png", visaType: "visa_free" as const },
+  { code: "GN", name: "Guinea", flag: "https://flagcdn.com/w40/gn.png", visaType: "visa_free" as const },
+  { code: "EG", name: "Egypt", flag: "https://flagcdn.com/w40/eg.png", visaType: "visa_free" as const },
+  { code: "JO", name: "Jordan", flag: "https://flagcdn.com/w40/jo.png", visaType: "visa_free" as const },
+  { code: "MY", name: "Malaysia", flag: "https://flagcdn.com/w40/my.png", visaType: "visa_free" as const },
+  { code: "ID", name: "Indonesia", flag: "https://flagcdn.com/w40/id.png", visaType: "visa_free" as const },
+  { code: "MV", name: "Maldives", flag: "https://flagcdn.com/w40/mv.png", visaType: "visa_free" as const },
+  // eVisa
+  { code: "TR", name: "Turkey", flag: "https://flagcdn.com/w40/tr.png", visaType: "evisa" as const },
+  { code: "QA", name: "Qatar", flag: "https://flagcdn.com/w40/qa.png", visaType: "evisa" as const },
+  { code: "LK", name: "Sri Lanka", flag: "https://flagcdn.com/w40/lk.png", visaType: "evisa" as const },
+  { code: "KE", name: "Kenya", flag: "https://flagcdn.com/w40/ke.png", visaType: "evisa" as const },
+  { code: "ET", name: "Ethiopia", flag: "https://flagcdn.com/w40/et.png", visaType: "evisa" as const },
+  { code: "RW", name: "Rwanda", flag: "https://flagcdn.com/w40/rw.png", visaType: "evisa" as const },
+  // On Arrival
+  { code: "AE", name: "UAE", flag: "https://flagcdn.com/w40/ae.png", visaType: "on_arrival" as const },
+  { code: "KH", name: "Cambodia", flag: "https://flagcdn.com/w40/kh.png", visaType: "on_arrival" as const },
+  { code: "MO", name: "Macao", flag: "https://flagcdn.com/w40/mo.png", visaType: "on_arrival" as const },
+  { code: "KM", name: "Comoros", flag: "https://flagcdn.com/w40/km.png", visaType: "on_arrival" as const },
+  { code: "DJ", name: "Djibouti", flag: "https://flagcdn.com/w40/dj.png", visaType: "on_arrival" as const },
+  { code: "SO", name: "Somalia", flag: "https://flagcdn.com/w40/so.png", visaType: "on_arrival" as const },
+  // Required
+  { code: "FR", name: "France", flag: "https://flagcdn.com/w40/fr.png", visaType: "required" as const },
+  { code: "ES", name: "Spain", flag: "https://flagcdn.com/w40/es.png", visaType: "required" as const },
+  { code: "DE", name: "Germany", flag: "https://flagcdn.com/w40/de.png", visaType: "required" as const },
+  { code: "IT", name: "Italy", flag: "https://flagcdn.com/w40/it.png", visaType: "required" as const },
+  { code: "GB", name: "UK", flag: "https://flagcdn.com/w40/gb.png", visaType: "required" as const },
+  { code: "US", name: "USA", flag: "https://flagcdn.com/w40/us.png", visaType: "required" as const },
+  { code: "CA", name: "Canada", flag: "https://flagcdn.com/w40/ca.png", visaType: "required" as const },
+  { code: "AU", name: "Australia", flag: "https://flagcdn.com/w40/au.png", visaType: "required" as const },
+];
+  // Visa Free
+  { code: "TN", name: "Tunisia", flag: "🇹🇳", visaType: "visa_free" as const },
+  { code: "MA", name: "Morocco", flag: "��", visaType: "visa_free" as const },
+  { code: "MR", name: "Mauritania", flag: "��", visaType: "visa_free" as const },
+  { code: "ML", name: "Mali", flag: "��", visaType: "visa_free" as const },
+  { code: "NE", name: "Niger", flag: "�🇪", visaType: "visa_free" as const },
+  { code: "SN", name: "Senegal", flag: "��", visaType: "visa_free" as const },
+  { code: "GM", name: "Gambia", flag: "🇬🇲", visaType: "visa_free" as const },
+  { code: "GN", name: "Guinea", flag: "🇬🇳", visaType: "visa_free" as const },
+  { code: "EG", name: "Egypt", flag: "��", visaType: "visa_free" as const },
+  { code: "JO", name: "Jordan", flag: "��", visaType: "visa_free" as const },
+  { code: "MY", name: "Malaysia", flag: "🇲🇾", visaType: "visa_free" as const },
+  { code: "ID", name: "Indonesia", flag: "🇮🇩", visaType: "visa_free" as const },
+  { code: "MV", name: "Maldives", flag: "🇲🇻", visaType: "visa_free" as const },
+  // eVisa
+  { code: "TR", name: "Turkey", flag: "🇹🇷", visaType: "evisa" as const },
+  { code: "QA", name: "Qatar", flag: "🇶🇦", visaType: "evisa" as const },
+  { code: "LK", name: "Sri Lanka", flag: "��", visaType: "evisa" as const },
+  { code: "KE", name: "Kenya", flag: "🇰🇪", visaType: "evisa" as const },
+  { code: "ET", name: "Ethiopia", flag: "🇪🇹", visaType: "evisa" as const },
+  { code: "RW", name: "Rwanda", flag: "��", visaType: "evisa" as const },
+  // On Arrival
+  { code: "AE", name: "UAE", flag: "🇦🇪", visaType: "on_arrival" as const },
+  { code: "KH", name: "Cambodia", flag: "🇰🇭", visaType: "on_arrival" as const },
+  { code: "MO", name: "Macao", flag: "🇲🇴", visaType: "on_arrival" as const },
+  { code: "KM", name: "Comoros", flag: "🇰🇲", visaType: "on_arrival" as const },
+  { code: "DJ", name: "Djibouti", flag: "🇩🇯", visaType: "on_arrival" as const },
+  { code: "SO", name: "Somalia", flag: "🇸�", visaType: "on_arrival" as const },
+  // Required
+  { code: "FR", name: "France", flag: "🇫🇷", visaType: "required" as const },
+  { code: "ES", name: "Spain", flag: "��", visaType: "required" as const },
+  { code: "DE", name: "Germany", flag: "🇩🇪", visaType: "required" as const },
+  { code: "IT", name: "Italy", flag: "🇮🇹", visaType: "required" as const },
+  { code: "GB", name: "UK", flag: "🇬�", visaType: "required" as const },
+  { code: "US", name: "USA", flag: "🇺🇸", visaType: "required" as const },
+  { code: "CA", name: "Canada", flag: "��", visaType: "required" as const },
+  { code: "AU", name: "Australia", flag: "��", visaType: "required" as const },
+];
+
+const VISA_TYPE_BADGE_COLORS: Record<string, string> = {
+  visa_free: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  evisa: "bg-blue-100 text-blue-700 border-blue-200",
+  on_arrival: "bg-amber-100 text-amber-700 border-amber-200",
+  required: "bg-red-100 text-red-700 border-red-200",
+};
+
+const VISA_TYPE_LABELS_LOCAL: Record<string, string> = {
+  visa_free: "Visa Free",
+  evisa: "eVisa",
+  on_arrival: "On Arrival",
+  required: "Required",
+};
+
+function VisaCountryGrid() {
+  const [filter, setFilter] = useState<string>("");
+
+  const filtered = filter === "" 
+    ? [] 
+    : VISA_COUNTRIES.filter(c => c.visaType === filter);
+
+  return (
+    <div>
+      <div className="mb-8 flex flex-wrap justify-center gap-2">
+        <button
+          type="button"
+          onClick={() => setFilter("visa_free")}
+          className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+            filter === "visa_free" 
+              ? "bg-[#185FA5] text-white" 
+              : "bg-white text-[#1A1A1A]/70 hover:bg-gray-100"
+          }`}
+        >
+          Visa Free
+        </button>
+        <button
+          type="button"
+          onClick={() => setFilter("evisa")}
+          className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+            filter === "evisa" 
+              ? "bg-[#185FA5] text-white" 
+              : "bg-white text-[#1A1A1A]/70 hover:bg-gray-100"
+          }`}
+        >
+          eVisa
+        </button>
+        <button
+          type="button"
+          onClick={() => setFilter("on_arrival")}
+          className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+            filter === "on_arrival" 
+              ? "bg-[#185FA5] text-white" 
+              : "bg-white text-[#1A1A1A]/70 hover:bg-gray-100"
+          }`}
+        >
+          On Arrival
+        </button>
+        <button
+          type="button"
+          onClick={() => setFilter("required")}
+          className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+            filter === "required" 
+              ? "bg-[#185FA5] text-white" 
+              : "bg-white text-[#1A1A1A]/70 hover:bg-gray-100"
+          }`}
+        >
+          Required
+        </button>
+      </div>
+
+      {filter === "" ? (
+        <div className="py-12 text-center text-[#1A1A1A]/60">
+          Select a visa type above to explore destinations
+        </div>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {filtered.map((country) => (
+            <div
+              key={country.code}
+              className="overflow-hidden rounded-2xl border border-black/[0.08] bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            >
+              <div className="flex items-center gap-3">
+                <img src={country.flag} alt={country.name} className="h-10 w-10 rounded object-contain" />
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-[#1A1A1A]">{country.name}</h3>
+                </div>
+              </div>
+              <Badge className={`mt-4 border ${VISA_TYPE_BADGE_COLORS[country.visaType]}`}>
+                {VISA_TYPE_LABELS_LOCAL[country.visaType]}
+              </Badge>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function VisasPage() {
+  const [nationality, setNationality] = useState("DZ");
+  const [destination, setDestination] = useState("FR");
+  const [checked, setChecked] = useState(false);
+
+  const requirement = getVisaRequirement(nationality, destination);
+  const destCountry = getCountry(destination);
+  const natCountry = getCountry(nationality);
+
+  return (
+    <PageLayout>
+      <section className="border-b border-black/[0.06] bg-[#F9F8F6] py-16">
+        <div className="mx-auto max-w-3xl px-4 text-center md:px-6">
+          <h1 className={`text-4xl ${SECTION_HEADING}`}>Find out your visa requirements</h1>
+          <p className="mt-4 text-[#1A1A1A]/60">
+            Select your nationality and destination to see visa type, documents, and fees.
+          </p>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2">
+            <CountryCombobox
+              label="Your nationality"
+              value={nationality}
+              onChange={setNationality}
+              premium
+            />
+            <CountryCombobox
+              label="Destination country"
+              value={destination}
+              onChange={setDestination}
+              premium
+            />
+          </div>
+          <Button
+            className="mt-8 rounded-2xl bg-gradient-to-r from-[#C9A84C] to-[#E8C97A] px-10 py-4 text-lg font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
+            onClick={() => setChecked(true)}
+          >
+            Check Requirements
+          </Button>
+        </div>
+      </section>
+
+      {checked && (
+        <section className="mx-auto max-w-3xl px-4 py-12 md:px-6">
+          <div className={`p-8 ${CARD_BASE}`}>
+            <div className="flex flex-wrap items-center gap-4">
+              <span className="text-5xl">{destCountry?.flag}</span>
+              <div>
+                <h2 className={`text-2xl ${SECTION_HEADING}`}>{destCountry?.name}</h2>
+                <p className="text-sm text-[#1A1A1A]/60">
+                  For {natCountry?.flag} {natCountry?.name} passport holders
+                </p>
+              </div>
+              <Badge className={`ml-auto border px-3 py-1 ${VISA_TYPE_COLORS[requirement.type]}`}>
+                {VISA_TYPE_LABELS[requirement.type]}
+              </Badge>
+            </div>
+            <div className="mt-8 grid gap-8 sm:grid-cols-2">
+              <div>
+                <h3 className={`mb-3 ${SECTION_HEADING}`}>Required documents</h3>
+                <ul className="space-y-2">
+                  {requirement.documents.map((d) => (
+                    <li key={d} className="flex items-start gap-2 text-sm text-[#1A1A1A]/80">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0F6E56]" />
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className={`space-y-4 rounded-xl bg-white/60 p-5 text-sm backdrop-blur-sm`}>
+                <p>
+                  <span className="font-semibold text-[#1A1A1A]">Processing:</span>{" "}
+                  <span className="text-[#1A1A1A]/70">{requirement.processingTime}</span>
+                </p>
+                <p>
+                  <span className="font-semibold text-[#1A1A1A]">Validity:</span>{" "}
+                  <span className="text-[#1A1A1A]/70">{requirement.validity}</span>
+                </p>
+                <p>
+                  <span className="font-semibold text-[#1A1A1A]">Embassy:</span>{" "}
+                  <span className="text-[#1A1A1A]/70">{requirement.embassy}</span>
+                </p>
+                <p className="text-lg font-bold text-[#185FA5]">
+                  Fee: ${requirement.fee} USD
+                </p>
+              </div>
+            </div>
+            <Button
+              asChild
+              className="mt-8 rounded-xl bg-[#0F6E56] px-8 py-3 text-white hover:bg-[#0a5542]"
+            >
+              <Link to="/visas/apply" search={{ nationality, destination }}>
+                Apply Now
+              </Link>
+            </Button>
+          </div>
+        </section>
+      )}
+
+      <section className="border-y border-black/[0.06] bg-[#1A1A1A]/[0.02] py-16">
+        <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <h2 className={`mb-4 text-center text-3xl ${SECTION_HEADING}`}>
+            Visa Requirements for Algerian Passport Holders
+          </h2>
+          <p className="mb-8 text-center text-[#1A1A1A]/60">
+            Explore visa requirements for popular destinations worldwide
+          </p>
+          
+          <VisaCountryGrid />
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-4 py-16 md:px-6">
+        <h2 className={`mb-8 text-2xl ${SECTION_HEADING}`}>Frequently Asked Questions</h2>
+        <Accordion type="single" collapsible className="w-full">
+          {VISA_FAQ.map((f, i) => (
+            <AccordionItem
+              key={i}
+              value={`faq-${i}`}
+              className="border-b border-gray-100 py-4"
+            >
+              <AccordionTrigger className="font-semibold text-[#1A1A1A] hover:no-underline">
+                {f.q}
+              </AccordionTrigger>
+              <AccordionContent className="text-[#1A1A1A]/70">{f.a}</AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 pb-16 md:px-6">
+        <h2 className={`mb-8 text-2xl ${SECTION_HEADING}`}>Popular Visa Destinations</h2>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {POPULAR_VISA_DESTINATIONS.map((d) => {
+            const c = getCountry(d.code);
+            return (
+              <div key={d.code} className={`p-6 ${CARD_BASE}`}>
+                <span className="text-4xl">{c?.flag}</span>
+                <p className={`mt-4 text-lg ${SECTION_HEADING}`}>{c?.name}</p>
+                <Badge className={`mt-2 border ${VISA_TYPE_COLORS[d.type]}`}>
+                  {VISA_TYPE_LABELS[d.type]}
+                </Badge>
+                <button
+                  type="button"
+                  className="mt-4 text-sm font-medium text-[#185FA5] hover:underline"
+                  onClick={() => {
+                    setDestination(d.code);
+                    setChecked(true);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                >
+                  Learn more →
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    </PageLayout>
+  );
+}

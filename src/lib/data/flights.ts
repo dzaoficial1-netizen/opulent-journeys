@@ -1,0 +1,175 @@
+export interface Flight {
+  id: string;
+  airline: string;
+  logo: string;
+  from: string;
+  fromCode: string;
+  to: string;
+  toCode: string;
+  depart: string;
+  arrive: string;
+  duration: string;
+  stops: number;
+  stopInfo: string;
+  cabin: string;
+  price: number;
+  airlineCode: string;
+}
+
+export const AIRLINES = [
+  "Air France",
+  "Emirates",
+  "Turkish Airlines",
+  "Qatar Airways",
+  "Lufthansa",
+  "British Airways",
+];
+
+export const FLIGHTS: Flight[] = [
+  {
+    id: "af-101",
+    airline: "Air France",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/4/44/Air_France_Logo.svg",
+    from: "Algiers",
+    fromCode: "ALG",
+    to: "Paris",
+    toCode: "CDG",
+    depart: "08:30",
+    arrive: "11:15",
+    duration: "2h 45m",
+    stops: 0,
+    stopInfo: "Non-stop",
+    cabin: "Economy",
+    price: 380,
+    airlineCode: "AF",
+  },
+  {
+    id: "ek-205",
+    airline: "Emirates",
+    logo: "EK",
+    from: "Algiers",
+    fromCode: "ALG",
+    to: "Dubai",
+    toCode: "DXB",
+    depart: "14:00",
+    arrive: "20:10",
+    duration: "6h 10m",
+    stops: 0,
+    stopInfo: "Non-stop",
+    cabin: "Economy",
+    price: 690,
+    airlineCode: "EK",
+  },
+  {
+    id: "tk-451",
+    airline: "Turkish Airlines",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Turkish_Airlines_logo_2019_compact.svg",
+    from: "Algiers",
+    fromCode: "ALG",
+    to: "Istanbul",
+    toCode: "IST",
+    depart: "06:45",
+    arrive: "10:05",
+    duration: "3h 20m",
+    stops: 0,
+    stopInfo: "Non-stop",
+    cabin: "Economy",
+    price: 420,
+    airlineCode: "TK",
+  },
+  {
+    id: "qr-312",
+    airline: "Qatar Airways",
+    logo: "QR",
+    from: "Algiers",
+    fromCode: "ALG",
+    to: "Doha",
+    toCode: "DOH",
+    depart: "22:30",
+    arrive: "06:15+1",
+    duration: "5h 45m",
+    stops: 0,
+    stopInfo: "Non-stop",
+    cabin: "Business",
+    price: 1240,
+    airlineCode: "QR",
+  },
+  {
+    id: "lh-892",
+    airline: "Lufthansa",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/b/b8/Lufthansa_Logo_2018.svg",
+    from: "Algiers",
+    fromCode: "ALG",
+    to: "Frankfurt",
+    toCode: "FRA",
+    depart: "11:20",
+    arrive: "15:50",
+    duration: "2h 30m",
+    stops: 0,
+    stopInfo: "Non-stop",
+    cabin: "Economy",
+    price: 350,
+    airlineCode: "LH",
+  },
+  {
+    id: "ba-456",
+    airline: "British Airways",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/4/42/British_airways_logo.png",
+    from: "Algiers",
+    fromCode: "ALG",
+    to: "London",
+    toCode: "LHR",
+    depart: "16:00",
+    arrive: "18:45",
+    duration: "2h 45m",
+    stops: 0,
+    stopInfo: "Non-stop",
+    cabin: "Economy",
+    price: 410,
+    airlineCode: "BA",
+  },
+  {
+    id: "af-203",
+    airline: "Air France",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/4/44/Air_France_Logo.svg",
+    from: "Algiers",
+    fromCode: "ALG",
+    to: "Paris",
+    toCode: "CDG",
+    depart: "18:15",
+    arrive: "21:00",
+    duration: "3h 45m",
+    stops: 1,
+    stopInfo: "1 stop · Marseille",
+    cabin: "Economy",
+    price: 290,
+    airlineCode: "AF",
+  },
+  {
+    id: "tk-789",
+    airline: "Turkish Airlines",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Turkish_Airlines_logo_2019_compact.svg",
+    from: "Algiers",
+    fromCode: "ALG",
+    to: "Istanbul",
+    toCode: "IST",
+    depart: "13:30",
+    arrive: "22:15",
+    duration: "6h 45m",
+    stops: 2,
+    stopInfo: "2 stops",
+    cabin: "Economy",
+    price: 260,
+    airlineCode: "TK",
+  },
+];
+
+export const CALENDAR_PRICES = [
+  { date: "Jun 7", price: 420, offset: -3 },
+  { date: "Jun 8", price: 390, offset: -2 },
+  { date: "Jun 9", price: 350, offset: -1 },
+  { date: "Jun 10", price: 380, offset: 0, selected: true },
+  { date: "Jun 11", price: 410, offset: 1 },
+  { date: "Jun 12", price: 395, offset: 2 },
+  { date: "Jun 13", price: 450, offset: 3 },
+];

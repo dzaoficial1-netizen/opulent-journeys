@@ -9,38 +9,198 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VisasRouteImport } from './routes/visas'
+import { Route as HotelsRouteImport } from './routes/hotels'
+import { Route as FlightsRouteImport } from './routes/flights'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as AccountRouteImport } from './routes/account'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VisasApplyRouteImport } from './routes/visas/apply'
+import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
+import { Route as FlightsBookRouteImport } from './routes/flights/book'
 
+const VisasRoute = VisasRouteImport.update({
+  id: '/visas',
+  path: '/visas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HotelsRoute = HotelsRouteImport.update({
+  id: '/hotels',
+  path: '/hotels',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FlightsRoute = FlightsRouteImport.update({
+  id: '/flights',
+  path: '/flights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VisasApplyRoute = VisasApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
+  getParentRoute: () => VisasRoute,
+} as any)
+const HotelsIdRoute = HotelsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => HotelsRoute,
+} as any)
+const FlightsBookRoute = FlightsBookRouteImport.update({
+  id: '/book',
+  path: '/book',
+  getParentRoute: () => FlightsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
+  '/checkout': typeof CheckoutRoute
+  '/flights': typeof FlightsRouteWithChildren
+  '/hotels': typeof HotelsRouteWithChildren
+  '/visas': typeof VisasRouteWithChildren
+  '/flights/book': typeof FlightsBookRoute
+  '/hotels/$id': typeof HotelsIdRoute
+  '/visas/apply': typeof VisasApplyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
+  '/checkout': typeof CheckoutRoute
+  '/flights': typeof FlightsRouteWithChildren
+  '/hotels': typeof HotelsRouteWithChildren
+  '/visas': typeof VisasRouteWithChildren
+  '/flights/book': typeof FlightsBookRoute
+  '/hotels/$id': typeof HotelsIdRoute
+  '/visas/apply': typeof VisasApplyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
+  '/checkout': typeof CheckoutRoute
+  '/flights': typeof FlightsRouteWithChildren
+  '/hotels': typeof HotelsRouteWithChildren
+  '/visas': typeof VisasRouteWithChildren
+  '/flights/book': typeof FlightsBookRoute
+  '/hotels/$id': typeof HotelsIdRoute
+  '/visas/apply': typeof VisasApplyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/account'
+    | '/checkout'
+    | '/flights'
+    | '/hotels'
+    | '/visas'
+    | '/flights/book'
+    | '/hotels/$id'
+    | '/visas/apply'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/account'
+    | '/checkout'
+    | '/flights'
+    | '/hotels'
+    | '/visas'
+    | '/flights/book'
+    | '/hotels/$id'
+    | '/visas/apply'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/account'
+    | '/checkout'
+    | '/flights'
+    | '/hotels'
+    | '/visas'
+    | '/flights/book'
+    | '/hotels/$id'
+    | '/visas/apply'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AccountRoute: typeof AccountRoute
+  CheckoutRoute: typeof CheckoutRoute
+  FlightsRoute: typeof FlightsRouteWithChildren
+  HotelsRoute: typeof HotelsRouteWithChildren
+  VisasRoute: typeof VisasRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/visas': {
+      id: '/visas'
+      path: '/visas'
+      fullPath: '/visas'
+      preLoaderRoute: typeof VisasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hotels': {
+      id: '/hotels'
+      path: '/hotels'
+      fullPath: '/hotels'
+      preLoaderRoute: typeof HotelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/flights': {
+      id: '/flights'
+      path: '/flights'
+      fullPath: '/flights'
+      preLoaderRoute: typeof FlightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +208,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/visas/apply': {
+      id: '/visas/apply'
+      path: '/apply'
+      fullPath: '/visas/apply'
+      preLoaderRoute: typeof VisasApplyRouteImport
+      parentRoute: typeof VisasRoute
+    }
+    '/hotels/$id': {
+      id: '/hotels/$id'
+      path: '/$id'
+      fullPath: '/hotels/$id'
+      preLoaderRoute: typeof HotelsIdRouteImport
+      parentRoute: typeof HotelsRoute
+    }
+    '/flights/book': {
+      id: '/flights/book'
+      path: '/book'
+      fullPath: '/flights/book'
+      preLoaderRoute: typeof FlightsBookRouteImport
+      parentRoute: typeof FlightsRoute
+    }
   }
 }
 
+interface FlightsRouteChildren {
+  FlightsBookRoute: typeof FlightsBookRoute
+}
+
+const FlightsRouteChildren: FlightsRouteChildren = {
+  FlightsBookRoute: FlightsBookRoute,
+}
+
+const FlightsRouteWithChildren =
+  FlightsRoute._addFileChildren(FlightsRouteChildren)
+
+interface HotelsRouteChildren {
+  HotelsIdRoute: typeof HotelsIdRoute
+}
+
+const HotelsRouteChildren: HotelsRouteChildren = {
+  HotelsIdRoute: HotelsIdRoute,
+}
+
+const HotelsRouteWithChildren =
+  HotelsRoute._addFileChildren(HotelsRouteChildren)
+
+interface VisasRouteChildren {
+  VisasApplyRoute: typeof VisasApplyRoute
+}
+
+const VisasRouteChildren: VisasRouteChildren = {
+  VisasApplyRoute: VisasApplyRoute,
+}
+
+const VisasRouteWithChildren = VisasRoute._addFileChildren(VisasRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AccountRoute: AccountRoute,
+  CheckoutRoute: CheckoutRoute,
+  FlightsRoute: FlightsRouteWithChildren,
+  HotelsRoute: HotelsRouteWithChildren,
+  VisasRoute: VisasRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

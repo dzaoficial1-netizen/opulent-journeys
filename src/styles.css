@@ -163,6 +163,9 @@
 @utility animate-ken-burns {
   animation: ken-burns 18s ease-in-out infinite alternate;
 }
+@utility animate-scroll {
+  animation: marquee 30s linear infinite;
+}
 
 @keyframes shimmer-sweep {
   0%   { background-position: -200% 0; }
